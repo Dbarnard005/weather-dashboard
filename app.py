@@ -1,7 +1,7 @@
 import os
 import sqlite3
 import requests
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 
 # Load the .env file
@@ -35,10 +35,22 @@ def get_weather():
         response = requests.get(url)
         data = response.json()
 
-        if data["cod"] != 200:
-            return jsonify({"error": "City not found"}), 404
+        # Handle specific OpenWeatherMap error codes
+        if data.get("cod") != 200:
+            error_message = data.get("message", "City not found")
+            return jsonify({"error": f"Error: {error_message}"}), 404
         
-        return jsonify(data)
+        # Extract only relevant data
+        weather_info = {
+            "city": data["name"],
+            "temperature": data["main"]["temp"],
+            "description": data["weather"][0]["description"],
+            "humidity": data["main"]["humidity"],
+            "wind_speed": data["wind"]["speed"],
+        }
+
+        return jsonify(weather_info)
+    
     except Exception as e:
         return jsonify({"error": f"Error fetching weather data: {str(e)}"}), 500
 
@@ -94,29 +106,9 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
-
-
-
-
-from flask import Flask, request, jsonify
-import requests
-
-app = Flask(__name__)
-
-@app.route('/weather')
-def weather():
-    city = request.args.get('city')
-    if not city:
-        return jsonify({'error': 'City parameter is missing.'}), 400
-    weather_data = get_weather_data(city)
-    if weather_data:
-        return jsonify(weather_data)
-    else:
-        return jsonify({'error': 'Weather data could not be retrieved.'}), 500
-
 def get_weather_data(city):
     # Replace with your actual weather API URL and key
-    api_url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid=YOUR_API_KEY&units=metric'
+    api_url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid=8509ca0ca523a36da93636cfb8530396&units=metric'
     response = requests.get(api_url)
     if response.status_code == 200:
         data = response.json()
