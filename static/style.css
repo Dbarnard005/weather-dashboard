@@ -179,15 +179,21 @@ body {
 
 
 /* Set a weather image background to the body */
+:root {
+  --background-image: url('https://media.istockphoto.com/id/1007768414/photo/blue-sky-with-bright-sun-and-clouds.jpg?s=612x612&w=0&k=20&c=MGd2-v42lNF7Ie6TtsYoKnohdCfOPFSPQt5XOz4uOy4=');
+}
+
 body {
+  /* Font and text */
   font-family: 'Arial', sans-serif;
-  background-image: url('https://media.istockphoto.com/id/1007768414/photo/blue-sky-with-bright-sun-and-clouds.jpg?s=612x612&w=0&k=20&c=MGd2-v42lNF7Ie6TtsYoKnohdCfOPFSPQt5XOz4uOy4='); /* Replace with your image URL */
-  background-size: cover; /* Ensures the image covers the entire body */
-  background-position: center; /* Centers the image */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
   color: #333;
   line-height: 1.6;
-  height: 100vh; /* Full viewport height */
+
+  /* Background */
+  background: center / cover no-repeat var(--background-image);
+
+  /* Layout */
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -195,3 +201,4 @@ body {
   margin: 0;
   padding: 0;
 }
+
